@@ -29,7 +29,7 @@
 }
 
 .title a {
-  color: #0070f3;
+  color: #f3cb00;
   text-decoration: none;
 }
 
@@ -37,6 +37,7 @@
 .title a:focus,
 .title a:active {
   text-decoration: underline;
+  font-size: 6rem;
 }
 
 .title {
@@ -89,7 +90,7 @@
 .card:focus,
 .card:active {
   color: #0070f3;
-  border-color: #0070f3;
+  border-color: #aef300;
 }
 
 .card h2 {
