@@ -1,7 +1,7 @@
 import { getSession, useSession } from 'next-auth/react'
 import prisma from 'lib/prisma'
 import { getJobsPosted, getUser, getApplications  } from 'lib/data.js'
-import Jobs from 'components/Jobs'
+import Job from 'components/Job'
 import Link from 'next/link'
 
 export default function Dashboard({ jobs, user, applications }) {
@@ -23,7 +23,13 @@ export default function Dashboard({ jobs, user, applications }) {
       </div>
 
       {user.company ? (
-        <Jobs jobs={jobs} isDashboard={true} />
+        <div>
+        {jobs.map((job, index) => (
+          <div key={index}>
+            <Job job={job} isDashboard={true} />
+          </div>
+        ))}
+        </div>
       ) : (
         <>
 			    {applications.map((application, application_index) => {

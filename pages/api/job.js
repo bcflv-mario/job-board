@@ -2,7 +2,7 @@ import prisma from 'lib/prisma'
 import { getSession } from 'next-auth/react'
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'POST' && req.method !== 'PUT') {
     return res.status(501).end()
   }
 
@@ -17,6 +17,43 @@ export default async function handler(req, res) {
   })
 
   if (!user) return res.status(401).json({ message: 'User not found' })
+
+  if (req.method === 'PUT') {
+    const job = await prisma.job.findUnique({
+      where: {
+        id: parseInt(req.body.id),
+      },
+    })
+  
+    if (job.authorId !== user.id) {
+      res.status(401).json({ message: 'Not authorized to edit' })
+    }
+  
+    if (req.body.task === 'publish') {
+      await prisma.job.update({
+        where: {
+          id: parseInt(req.body.id),
+        },
+        data: {
+          published: true,
+        },
+      })
+    }
+  
+    if (req.body.task === 'unpublish') {
+      await prisma.job.update({
+        where: {
+          id: parseInt(req.body.id),
+        },
+        data: {
+          published: false,
+        },
+      })
+    }
+  
+    res.status(200).end()
+    return
+  }
 
   if (req.method === 'POST') {
     if (!req.body.title)
